@@ -7,14 +7,23 @@ using UnityEngine.UI;
 public class ActivateLookedAtObjects : MonoBehaviour 
 {
     [SerializeField]
-    private float maxActivateDistance = 6.0f;
+    private float maxActivateDistance = 2;
 
     [SerializeField]
     private Text lookedAtObjectText;
 
+    [SerializeField]
+    private InventoryMenu canvas;
+
     private IActivatable objectLookedAt;
-	
-	void FixedUpdate ()
+    private InventoryMenu inventoryMenu;
+
+    private void Start()
+    {
+        inventoryMenu = GetComponent<InventoryMenu>();
+    }
+
+    void Update ()
     {
         Debug.DrawRay(transform.position, transform.forward * maxActivateDistance);
 
@@ -30,6 +39,7 @@ public class ActivateLookedAtObjects : MonoBehaviour
             if (Input.GetButtonDown("Fire1"))
             {
                 objectLookedAt.DoActivate();
+               canvas.GenerateMenuItems();
             }
         }
     }

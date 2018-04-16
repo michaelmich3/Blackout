@@ -8,10 +8,12 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class InventoryMenu : MonoBehaviour 
 {
     [SerializeField]
-    private GameObject inventoryMenuPanel;
+    private GameObject pauseMenuPanel;
 
     [SerializeField]
     private CharacterMovement characterMovement;
+    [SerializeField]
+    private CharacterCamera characterCamera;
 
     [SerializeField]
     private GameObject menuItemPrefab;
@@ -29,7 +31,7 @@ public class InventoryMenu : MonoBehaviour
 
     bool IsVisible
     {
-        get { return inventoryMenuPanel.activeSelf; }
+        get { return pauseMenuPanel.activeSelf; }
     }
 
     public void UpdateDescriptionAreaText(string descriptionText)
@@ -68,19 +70,20 @@ public class InventoryMenu : MonoBehaviour
                 ShowMenu();
             }
             UpdateCursor();
-            UpdateFirstPersonController();
+            UpdateCharacterMovement();
         }
     }
 
     private void ShowMenu()
     {
         UpdateDescriptionAreaText(defaultDescriptionText);
-        GenerateMenuItems();
-        inventoryMenuPanel.SetActive(true);
+        pauseMenuPanel.SetActive(true);
     }
 
-    private void GenerateMenuItems()
+    public void GenerateMenuItems()
     {
+        DestroyInventoryMenuItems();
+
         foreach (InventoryObject item in PlayerInventory)
         {
             GameObject newMenuItem = Instantiate(menuItemPrefab, inventoryItemListPanel) as GameObject;
@@ -98,15 +101,15 @@ public class InventoryMenu : MonoBehaviour
         }
     }
 
-    private void UpdateFirstPersonController()
+    private void UpdateCharacterMovement()
     {
         characterMovement.enabled = !IsVisible;
+        characterCamera.enabled = !IsVisible;
     }
 
     private void HideMenu()
     {
-        inventoryMenuPanel.SetActive(false);
-        DestroyInventoryMenuItems();
+        pauseMenuPanel.SetActive(false);
     }
 
     private void DestroyInventoryMenuItems()
