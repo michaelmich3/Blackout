@@ -38,7 +38,7 @@ public class ActivateLookedAtObjects : MonoBehaviour
         {
             if (Input.GetButtonDown("Fire1"))
             {
-                objectLookedAt.DoActivate();
+               objectLookedAt.DoActivate();
                canvas.GenerateMenuItems();
             }
         }
