@@ -30,7 +30,7 @@ namespace UnityStandardAssets.Utility
             RaycastHit hit = new RaycastHit();
             if (
                 !Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition).origin,
-                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, 100,
+                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, 2,
                                  Physics.DefaultRaycastLayers))
             {
                 return;
