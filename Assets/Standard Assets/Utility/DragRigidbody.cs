@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UnityStandardAssets.Utility
 {
     public class DragRigidbody : MonoBehaviour
     {
+        [SerializeField] private float maxDistance = 2.5f;
+        [SerializeField] private Text crosshair;
+
         const float k_Spring = 100.0f;
         const float k_Damper = 5.0f;
         const float k_Drag = 10.0f;
@@ -15,9 +19,14 @@ namespace UnityStandardAssets.Utility
 
         private SpringJoint m_SpringJoint;
 
+        private Rigidbody objectLookedAt;
+
 
         private void Update()
         {
+            UpdateObjectLookedAt();
+            UpdateCrosshair();
+
             // Make sure the user pressed the mouse down
             if (!Input.GetMouseButtonDown(0))
             {
@@ -30,7 +39,7 @@ namespace UnityStandardAssets.Utility
             RaycastHit hit = new RaycastHit();
             if (
                 !Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition).origin,
-                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, 2,
+                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, maxDistance,
                                  Physics.DefaultRaycastLayers))
             {
                 return;
@@ -91,6 +100,27 @@ namespace UnityStandardAssets.Utility
             }
 
             return Camera.main;
+        }
+
+        private void UpdateCrosshair()
+        {
+            if (objectLookedAt != null)
+                crosshair.color = Color.green;
+            else
+                crosshair.color = Color.white;
+        }
+
+        private void UpdateObjectLookedAt()
+        {
+            RaycastHit hit;
+            objectLookedAt = null;
+
+            if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance))
+            {
+                Debug.Log("Hit: " + hit.transform.name);
+
+                objectLookedAt = hit.transform.GetComponent<Rigidbody>();
+            }
         }
     }
 }
